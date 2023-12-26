@@ -11,7 +11,6 @@ import java.util.*
 @RequestMapping("/test")
 class ControllerTest {
 
-
     @GetMapping
     fun findById(@PathVariable id: UUID?): ResponseEntity<String> {
         return ResponseEntity.ok("funcionou.....")

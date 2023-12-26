@@ -3,6 +3,6 @@ spring:
   #database
   data:
     mongodb:
-      uri: mongodb+srv://apipostaai:GMtd92e0J6m1poDz@post-ai-database.vpt51es.mongodb.net/?retryWrites=true&w=majority
+      uri: ${MONGO_DATABASE_URI:mongodb://localhost:27017}
       database: post-ai-database
 
