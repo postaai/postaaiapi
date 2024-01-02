@@ -5,4 +5,10 @@ spring:
     mongodb:
       uri: ${MONGO_DATABASE_URI:mongodb://localhost:27017}
       database: post-ai-database
+      auto-index-creation: true
 
+
+  rabbitmq:
+    addresses: ${MS_ADDRESS}
+    queues:
+      send-order-queue: order

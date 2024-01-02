@@ -28,10 +28,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+	implementation("org.springframework.boot:spring-boot-starter-amqp:3.2.1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.amqp:spring-rabbit-test:3.1.1")
 }
 
 tasks.withType<KotlinCompile> {
