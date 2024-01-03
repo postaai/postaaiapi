@@ -10,24 +10,19 @@ import java.io.Serializable
 data class OrderEntity(
 
     @Id
-    @JsonProperty("id")
     private val id: String? = null,
 
-    @JsonProperty("idUser")
     private val idUser: String,
 
-    @JsonProperty("idTemplate")
     private val idTemplate: String,
 
-    @JsonProperty("pathLogo")
     private val pathLogo: String,
 
-    @JsonProperty("paymentStatus")
-    private val paymentStatus: String,
+    private val fields: Map<String, String>
 
-    @JsonProperty("resultPack")
-    private val resultPack: List<ResultPack>,
+   // private val paymentStatus: String,
 
-    @JsonProperty("processStatus")
-    private val processStatus: String
-): Serializable
+    //private val resultPack: List<ResultPack>,
+
+    //private val processStatus: String
+)

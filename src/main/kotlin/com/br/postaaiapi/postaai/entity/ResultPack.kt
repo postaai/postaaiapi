@@ -6,9 +6,6 @@ import java.util.*
 
 data class ResultPack(
 
-    @JsonProperty("id")
     private val id: UUID,
-
-    @JsonProperty("path")
     private val path: String
-): Serializable
+)

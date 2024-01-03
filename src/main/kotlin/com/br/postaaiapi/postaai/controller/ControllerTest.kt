@@ -18,10 +18,11 @@ class ControllerTest(
         val orderEntity = OrderEntity(
             idUser = orderRequest.idUser,
             idTemplate = "f9bf1bce-5d50-11ee-8c99-0242ac120002",
-            pathLogo = "s3://postaai-orders/70411724-5d66-11ee-8c99-0242ac120002/logo.png",
-            paymentStatus = orderRequest.paymentStatus,
-            processStatus = orderRequest.processStatus,
-            resultPack = Collections.singletonList(ResultPack(UUID.randomUUID(), "123"))
+            pathLogo = "70411724-5d66-11ee-8c99-0242ac120002/logo.png",
+            fields = orderRequest.fields
+           // paymentStatus = orderRequest.paymentStatus,
+           // processStatus = orderRequest.processStatus,
+           // resultPack = Collections.singletonList(ResultPack(UUID.randomUUID(), "123"))
         )
 
         val result = sendOrderAndSave.sendMessage(orderEntity)
