@@ -14,11 +14,11 @@ class ControllerTest(
 ) {
 
     @PostMapping("/sendOrder")
-    fun sendOrder(@RequestBody orderRequest: OrderRequest): OrderEntity{
+    fun sendOrder(@RequestBody orderRequest: OrderRequest): ResponseEntity<OrderEntity> {
         val orderEntity = OrderEntity(
             idUser = orderRequest.idUser,
-            idTemplate = "f9bf1bce-5d50-11ee-8c99-0242ac120002",
-            pathLogo = "70411724-5d66-11ee-8c99-0242ac120002/logo.png",
+            templateUri = "s3://postaai-templates/template-f9bf1bce-5d50-11ee-8c99-0242ac120002.7z",
+            logoUri = "s3://postaai-orders/70411724-5d66-11ee-8c99-0242ac120002/logo.png",
             fields = orderRequest.fields
            // paymentStatus = orderRequest.paymentStatus,
            // processStatus = orderRequest.processStatus,
@@ -27,7 +27,7 @@ class ControllerTest(
 
         val result = sendOrderAndSave.sendMessage(orderEntity)
 
-        return result
+        return ResponseEntity.ok(result)
 
     }
     @GetMapping

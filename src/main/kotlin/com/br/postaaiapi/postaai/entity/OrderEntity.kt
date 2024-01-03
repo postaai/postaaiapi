@@ -1,7 +1,5 @@
 package com.br.postaaiapi.postaai.entity
 
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.io.Serializable
@@ -10,19 +8,19 @@ import java.io.Serializable
 data class OrderEntity(
 
     @Id
-    private val id: String? = null,
+     val id: String? = null,
 
-    private val idUser: String,
+     val idUser: String,
 
-    private val idTemplate: String,
+     val templateUri: String,
 
-    private val pathLogo: String,
+     val logoUri: String,
 
-    private val fields: Map<String, String>
+     val fields: Map<String, String>
 
    // private val paymentStatus: String,
 
     //private val resultPack: List<ResultPack>,
 
     //private val processStatus: String
-)
+): Serializable
