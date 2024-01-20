@@ -33,6 +33,7 @@ dependencies {
 	implementation("com.google.code.gson:gson:2.10.1")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	implementation("org.mapstruct:mapstruct:1.5.5.Final")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.amqp:spring-rabbit-test:3.1.1")
 }
