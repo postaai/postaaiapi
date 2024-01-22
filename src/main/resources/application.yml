@@ -1,5 +1,4 @@
 spring:
-
   #database
   data:
     mongodb:
@@ -7,8 +6,26 @@ spring:
       database: post-ai-database
       auto-index-creation: true
 
-
   rabbitmq:
     addresses: ${MS_ADDRESS}
     queues:
       send-order-queue: order
+
+  servlet:
+    multipart:
+      max-file-size: 1MB
+      max-request-size: 1MB
+
+#AWS
+s3:
+  bucket-order: ${BUCKETORDERNAME}
+  bucket-template: ${BUCKETTEMPLATENAME}
+  region: us-east-2
+
+aws:
+    access_key_id: ${ACCESSKEYID}
+    secret_access_key: ${SECRETACCESSKEY}
+
+# Server configuration
+server:
+  port: 8080

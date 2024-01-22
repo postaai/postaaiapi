@@ -1,8 +1,8 @@
 package com.br.postaaiapi.postaai.gateway
 
-import com.br.postaaiapi.postaai.entity.OrderEntity
+import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageInput
 
 interface RabbitMQGateway {
 
-    fun sendMessageOrder(message: OrderEntity)
+    fun sendMessageOrder(message: OrderMessageInput)
 }
