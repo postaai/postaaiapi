@@ -7,9 +7,11 @@ import com.br.postaaiapi.postaai.enum.EnumProcessStatus
 import com.br.postaaiapi.postaai.gateway.RabbitMQGateway
 import com.br.postaaiapi.postaai.gateway.S3Gateway
 import com.br.postaaiapi.postaai.service.OrderService
+import com.br.postaaiapi.postaai.service.TemplateService
 import com.br.postaaiapi.postaai.service.bussinessModel.OrderBusinessInput
 import com.br.postaaiapi.postaai.service.bussinessModel.OrderBusinessOutput
 import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageInput
+import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageProcessedInput
 import com.br.postaaiapi.postaai.service.converter.OrderServiceConverter
 import com.br.postaaiapi.postaai.useCase.OrderUseCase
 import org.springframework.beans.factory.annotation.Value
@@ -23,6 +25,7 @@ import java.util.*
 @Service
 class OrderUseCaseImpl(
     private val orderService: OrderService,
+    private val templateService: TemplateService,
     private val s3Gateway: S3Gateway,
     private val rabbitMQGateway: RabbitMQGateway,
     private val orderServiceConverter: OrderServiceConverter
@@ -34,41 +37,45 @@ class OrderUseCaseImpl(
 
         val orderEntity = OrderEntity(
             idUser = order.idUser,
-            template = getTemplate(order.idTemplate, order.fields),
+            template = getTemplateById(order.idTemplate),
             paymentStatus = EnumPaymentStatus.PENDING.getDescription(),
             processStatus = EnumProcessStatus.PROCESSING.getDescription(),
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now(),
-            fields = order.fields ?: emptyMap()
+            fields = order.fields
         )
 
-        return orderService.saveOrder(orderEntity)
+        return orderServiceConverter.toBusinessOutput(orderService.saveOrder(orderEntity))
     }
 
     override fun saveLogo(logo: MultipartFile, orderId: String) {
         val idLogo = UUID.randomUUID().toString()
-        val logoUri = s3Gateway.uploadFile(bucketOrder, logo, idLogo, idLogo)
+        val logoUri = s3Gateway.uploadImage(bucketOrder, logo, idLogo, idLogo)
         val order = orderService.findByOrderId(orderId)
         order.logoUri = logoUri.toString()
         order.updatedAt = LocalDateTime.now()
-        orderService.saveOrder(orderServiceConverter.toEntity(order))
+        orderService.saveOrder(order)
     }
 
     override fun sendOrder(orderId: String) {
         val order = orderService.findByOrderId(orderId)
         order.paymentStatus = EnumPaymentStatus.APPROVED.getDescription()
         order.updatedAt = LocalDateTime.now()
-        val orderPersisted = orderService.saveOrder(orderServiceConverter.toEntity(order))
-        sendOrderQueue(orderPersisted)
+        val orderPersisted = orderService.saveOrder(order)
+        sendOrderQueue(orderServiceConverter.toBusinessOutput(orderPersisted))
 
     }
 
     override fun findAllOrders(pageable: Pageable): Page<OrderBusinessOutput>? {
-        return orderService.findAllOrders(pageable)
+        return orderService.findAllOrders(pageable).map(orderServiceConverter::toBusinessOutput)
     }
 
     override fun findById(id: String): OrderBusinessOutput {
-        return orderService.findByOrderId(id)
+        return orderService.findByOrderId(id).let(orderServiceConverter::toBusinessOutput)
+    }
+
+    override fun saveResultOrder(order: OrderMessageProcessedInput) {
+        TODO("Not yet implemented")
     }
 
     private fun sendOrderQueue(orderPersisted: OrderBusinessOutput) {
@@ -84,14 +91,8 @@ class OrderUseCaseImpl(
         )
         rabbitMQGateway.sendMessageOrder(message)
     }
-}
 
-private fun getTemplate(idTemplate: String, fields: Map<String, String>?): TemplateEntity {
-    return TemplateEntity(
-        id = idTemplate,
-        name = "Template Teste",
-        description = "tempete de teste",
-        uri = "s3://postaai-templates/template-f9bf1bce-5d50-11ee-8c99-0242ac120002.7z",
-        fields = fields.let { fields ?: emptyMap() }
-    )
+    private fun getTemplateById(idTemplate: String): TemplateEntity {
+        return templateService.findTemplateById(idTemplate)
+    }
 }

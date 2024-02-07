@@ -10,10 +10,10 @@ import java.net.URI
 interface OrderService {
 
     @Transactional
-    fun saveOrder(order: OrderEntity): OrderBusinessOutput
+    fun saveOrder(order: OrderEntity): OrderEntity
 
-    fun findByOrderId(id: String): OrderBusinessOutput
+    fun findByOrderId(id: String): OrderEntity
     fun saveLogo(idOrder: String, logoUri: URI)
 
-    fun findAllOrders(pageable: Pageable): Page<OrderBusinessOutput>?
+    fun findAllOrders(pageable: Pageable): Page<OrderEntity>
 }

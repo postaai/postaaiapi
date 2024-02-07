@@ -10,11 +10,12 @@ spring:
     addresses: ${MS_ADDRESS}
     queues:
       send-order-queue: order
+      order-processed-queue: order-process-result
 
-  servlet:
+servlet:
     multipart:
-      max-file-size: 1MB
-      max-request-size: 1MB
+      max-file-size: 20MB
+      max-request-size: 20MB
 
 #AWS
 s3:
