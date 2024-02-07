@@ -10,6 +10,7 @@ import com.br.postaaiapi.postaai.service.OrderService
 import com.br.postaaiapi.postaai.service.bussinessModel.OrderBusinessInput
 import com.br.postaaiapi.postaai.service.bussinessModel.OrderBusinessOutput
 import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageInput
+import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageProcessedInput
 import com.br.postaaiapi.postaai.service.converter.OrderServiceConverter
 import com.br.postaaiapi.postaai.useCase.OrderUseCase
 import org.springframework.beans.factory.annotation.Value
@@ -47,7 +48,7 @@ class OrderUseCaseImpl(
 
     override fun saveLogo(logo: MultipartFile, orderId: String) {
         val idLogo = UUID.randomUUID().toString()
-        val logoUri = s3Gateway.uploadFile(bucketOrder, logo, idLogo, idLogo)
+        val logoUri = s3Gateway.uploadImage(bucketOrder, logo, idLogo, idLogo)
         val order = orderService.findByOrderId(orderId)
         order.logoUri = logoUri.toString()
         order.updatedAt = LocalDateTime.now()
@@ -71,6 +72,10 @@ class OrderUseCaseImpl(
         return orderService.findByOrderId(id)
     }
 
+    override fun saveResultOrder(order: OrderMessageProcessedInput) {
+        TODO("Not yet implemented")
+    }
+
     private fun sendOrderQueue(orderPersisted: OrderBusinessOutput) {
         if (orderPersisted.paymentStatus != EnumPaymentStatus.APPROVED.getDescription()) {
             throw Exception("Order not approved")
@@ -92,6 +97,9 @@ private fun getTemplate(idTemplate: String, fields: Map<String, String>?): Templ
         name = "Template Teste",
         description = "tempete de teste",
         uri = "s3://postaai-templates/template-f9bf1bce-5d50-11ee-8c99-0242ac120002.7z",
-        fields = fields.let { fields ?: emptyMap() }
+        fields = emptyList(),
+        createdAt = LocalDateTime.now(),
+        updatedAt = LocalDateTime.now(),
+        exampleImages = emptyList()
     )
 }

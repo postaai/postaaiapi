@@ -1,8 +1,6 @@
 package com.br.postaaiapi.postaai.entity
 
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
-import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.mongodb.core.mapping.Document
 import java.io.Serializable
 import java.time.LocalDateTime
@@ -13,10 +11,9 @@ data class TemplateEntity(
     val id: String? = null,
     val name: String,
     val description: String,
-    val uri: String,
-    val fields: Map<String, String>,
-    @CreatedDate
+    val uri: String? = null,
+    val fields: List<String>,
     val createdAt: LocalDateTime? = null,
-    @LastModifiedDate
     val updatedAt: LocalDateTime? = null,
+    val exampleImages: List<String>? = null
 ): Serializable
