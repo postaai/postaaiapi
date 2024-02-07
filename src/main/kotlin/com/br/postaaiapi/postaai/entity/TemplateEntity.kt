@@ -11,9 +11,9 @@ data class TemplateEntity(
     val id: String? = null,
     val name: String,
     val description: String,
-    val uri: String? = null,
+    var uri: String? = null,
     val fields: List<String>,
     val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null,
-    val exampleImages: List<String>? = null
+    var updatedAt: LocalDateTime? = null,
+    var exampleImages: List<String>? = null
 ): Serializable

@@ -4,28 +4,26 @@ import com.br.postaaiapi.postaai.entity.TemplateEntity
 import com.br.postaaiapi.postaai.exception.ObjectNotFoundException
 import com.br.postaaiapi.postaai.repository.TemplateRepository
 import com.br.postaaiapi.postaai.service.TemplateService
-import com.br.postaaiapi.postaai.service.bussinessModel.TemplateBusinessOutput
-import com.br.postaaiapi.postaai.service.converter.TemplateServiceConverter
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
+private const val TEMPLATE_NAO_ENCONTRADO = "Template não encontrado"
+
 @Service
 class TemplateServiceImpl(
     private val templateRepository: TemplateRepository,
-    private val templateServiceConverter: TemplateServiceConverter
 ) : TemplateService {
-    override fun saveTemplate(template: TemplateEntity): TemplateBusinessOutput {
-        return templateServiceConverter.toBusinessOutput(templateRepository.save(template))
+    override fun saveTemplate(template: TemplateEntity): TemplateEntity {
+        return templateRepository.save(template)
     }
 
-    override fun findTemplateById(id: String): TemplateBusinessOutput {
+    override fun findTemplateById(id: String): TemplateEntity {
         return templateRepository.findById(id)
-            .orElseThrow { ObjectNotFoundException() }
-            .let(templateServiceConverter::toBusinessOutput)
+            .orElseThrow { ObjectNotFoundException(TEMPLATE_NAO_ENCONTRADO) }
     }
 
-    override fun findAllTemplates(pageable: Pageable): Page<TemplateBusinessOutput> {
-        return templateRepository.findAll(pageable).map(templateServiceConverter::toBusinessOutput)
+    override fun findAllTemplates(pageable: Pageable): Page<TemplateEntity> {
+        return templateRepository.findAll(pageable)
     }
 }

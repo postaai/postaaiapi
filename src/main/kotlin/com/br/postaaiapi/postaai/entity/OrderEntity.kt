@@ -14,8 +14,8 @@ data class OrderEntity(
     val template: TemplateEntity,
     var logoUri: String? = null,
     val createdAt: LocalDateTime? = null,
-    val updatedAt: LocalDateTime? = null,
-    val paymentStatus: String? = null,
+    var updatedAt: LocalDateTime? = null,
+    var paymentStatus: String? = null,
     val resultPack: List<ResultPack>? = null,
     val fields: Map<String, String>? = null,
     val processStatus: String? = null

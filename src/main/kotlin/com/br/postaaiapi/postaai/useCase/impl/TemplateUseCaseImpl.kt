@@ -33,7 +33,7 @@ class TemplateUseCaseImpl(
             updatedAt = LocalDateTime.now()
             )
 
-        return templateService.saveTemplate(templateEntity)
+        return templateServiceConverter.toBusinessOutput(templateService.saveTemplate(templateEntity))
 
     }
 
@@ -42,7 +42,7 @@ class TemplateUseCaseImpl(
         val packURI = s3Gateway.uploadObject(bucketTemplate, file, templateID, templateID)
         template.uri = packURI.toString()
         template.updatedAt = LocalDateTime.now()
-        templateService.saveTemplate(templateServiceConverter.toEntity(template))
+        templateService.saveTemplate(template)
     }
 
     override fun saveImagesExample(file: List<MultipartFile>, templateID: String) {
@@ -52,14 +52,14 @@ class TemplateUseCaseImpl(
         }
         template.exampleImages = imagesURI.map { it.toString() }
         template.updatedAt = LocalDateTime.now()
-        templateService.saveTemplate(templateServiceConverter.toEntity(template))
+        templateService.saveTemplate(template)
     }
 
     override fun findAllTemplates(pageable: Pageable): Page<TemplateBusinessOutput> {
-        return templateService.findAllTemplates(pageable)
+        return templateService.findAllTemplates(pageable).map(templateServiceConverter::toBusinessOutput)
     }
 
     override fun findById(id: String): TemplateBusinessOutput {
-        return templateService.findTemplateById(id)
+        return templateService.findTemplateById(id).let(templateServiceConverter::toBusinessOutput)
     }
 }

@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable
 
 interface TemplateService {
 
-    fun saveTemplate(template: TemplateEntity): TemplateBusinessOutput
+    fun saveTemplate(template: TemplateEntity): TemplateEntity
 
-    fun findTemplateById(id: String): TemplateBusinessOutput
+    fun findTemplateById(id: String): TemplateEntity
 
-    fun findAllTemplates(pageable: Pageable): Page<TemplateBusinessOutput>
+    fun findAllTemplates(pageable: Pageable): Page<TemplateEntity>
 }
