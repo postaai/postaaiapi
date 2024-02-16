@@ -29,6 +29,7 @@ class TemplateUseCaseImpl(
             name = template.name,
             description = template.description,
             fields = template.fields,
+            price = template.price,
             createdAt = LocalDateTime.now(),
             updatedAt = LocalDateTime.now()
             )
