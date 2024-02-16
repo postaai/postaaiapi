@@ -1,6 +1,7 @@
 package com.br.postaaiapi.postaai.service.bussinessModel
 
 import java.io.Serializable
+import java.math.BigDecimal
 import java.time.LocalDateTime
 
 data class TemplateBusinessOutput(
@@ -10,6 +11,7 @@ data class TemplateBusinessOutput(
         val description: String,
         var uri: String? = null,
         val fields: List<String>,
+        val price: BigDecimal,
         val createdAt: LocalDateTime? = null,
         var updatedAt: LocalDateTime? = null,
         var exampleImages: List<String>? = null
