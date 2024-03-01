@@ -15,25 +15,25 @@ import org.springframework.web.multipart.MultipartFile
 interface OrderController {
 
     @Operation(summary = "Create Order", description = "Create Order for generate packs")
-    @PostMapping("/create-order")
+    @PostMapping("/create")
     fun createOrder(@RequestBody @Valid orderRequest: OrderRequest): ResponseEntity<OrderResponse>
 
     @Operation(summary = "Insert Logo", description = "Insert Logo by Order ID")
-    @PostMapping("/insert-logo")
+    @PostMapping("/insertLogo")
     fun insertLogo(
         @RequestParam("file") file: MultipartFile,
         @RequestParam("orderID") orderID: String
     ): ResponseEntity<Any>
 
     @Operation(summary = "Approve Order", description = "Approve Order and Send to queue Order by Order ID")
-    @PatchMapping("/approve-order")
+    @PatchMapping("/approve")
     fun approveOrder(@RequestParam("orderID") orderID: String): ResponseEntity<Any>
 
     @Operation(summary = "Get Order", description = "Get Order by Order ID")
-    @GetMapping("/get-order/{orderID}")
+    @GetMapping("/get/{orderID}")
     fun getOrder(@PathVariable("orderID") orderID: String): ResponseEntity<OrderResponse>
 
     @Operation(summary = "Get All Orders", description = "Get All Orders")
-    @GetMapping("/get-all-orders")
+    @GetMapping("/getAll")
     fun getAllOrders(pageable: Pageable): ResponseEntity<Page<OrderResponse>>
 }
