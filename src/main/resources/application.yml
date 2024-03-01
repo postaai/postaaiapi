@@ -14,8 +14,8 @@ spring:
 
   servlet:
       multipart:
-        max-file-size: 20MB
-        max-request-size: 20MB
+        max-file-size: 10MB
+        max-request-size: 10MB
 
 #AWS
 s3:
@@ -26,6 +26,10 @@ s3:
 aws:
     access_key_id: ${ACCESSKEYID}
     secret_access_key: ${SECRETACCESSKEY}
+
+thumbnail:
+  width: ${SCALINGWIDTH:200}
+  height: ${SCALINGHEIGHT:200}
 
 # Server configuration
 server:

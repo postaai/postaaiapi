@@ -22,8 +22,6 @@ private const val JPG = "jpg"
 
 private const val CONTENT_TYPE = "image"
 
-private const val APPLICATION_X_7_Z_COMPRESSED = "application/x-7z-compressed"
-
 @Service
 class S3GatewayImpl(
     private val s3Client: AmazonS3
@@ -44,19 +42,16 @@ class S3GatewayImpl(
         }
     }
 
-    override fun uploadObject(bucket: String?, file: MultipartFile, fileName: String, folderName: String): URI {
-        val meta = ObjectMetadata().apply {
-            contentType = APPLICATION_X_7_Z_COMPRESSED
-            contentLength = file.size
-        }
-
-        val inputStream = ByteArrayInputStream(file.bytes)
+    override fun uploadImage(bucket: String?, image: BufferedImage, fileName: String, folderName: String): URI {
+        val meta = ObjectMetadata()
+        meta.contentType = CONTENT_TYPE
+        val inputStream = getInputStream(image)
         s3Client.putObject(bucket, "$folderName/$fileName", inputStream, meta)
 
         try {
             return s3Client.getUrl(bucket, "$folderName/$fileName").toURI()
         } catch (e: Exception) {
-            throw FileException().errorUploadFile()
+            throw FileException().errorToGetImageURI()
         }
     }
 

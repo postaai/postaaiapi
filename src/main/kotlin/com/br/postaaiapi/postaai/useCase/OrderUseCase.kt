@@ -16,9 +16,8 @@ interface OrderUseCase {
 
     fun sendOrder(orderId: String)
 
-    fun findAllOrders(pageable: Pageable): Page<OrderBusinessOutput>?
-
     fun findById(id: String): OrderBusinessOutput
 
-    fun saveResultOrder(order: OrderMessageProcessedInput)
+    fun findByIdUser(idUser: String, pageable: Pageable): Page<OrderBusinessOutput>?
+
 }

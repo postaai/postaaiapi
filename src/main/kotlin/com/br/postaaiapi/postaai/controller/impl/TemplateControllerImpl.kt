@@ -2,6 +2,7 @@ package com.br.postaaiapi.postaai.controller.impl
 
 import com.br.postaaiapi.postaai.controller.TemplateController
 import com.br.postaaiapi.postaai.controller.convert.TemplateControllerConvert
+import com.br.postaaiapi.postaai.controller.models.TemplateAllResponse
 import com.br.postaaiapi.postaai.controller.models.TemplateRequest
 import com.br.postaaiapi.postaai.controller.models.TemplateResponse
 import com.br.postaaiapi.postaai.useCase.TemplateUseCase
@@ -19,9 +20,9 @@ class TemplateControllerImpl(
     private val templateUseCase: TemplateUseCase,
     private val templateControllerConvert: TemplateControllerConvert
 ): TemplateController {
-    override fun getAllTemplates(pageable: Pageable): ResponseEntity<Page<TemplateResponse>> {
+    override fun getAllTemplates(pageable: Pageable): ResponseEntity<Page<TemplateAllResponse>> {
         val templates = templateUseCase.findAllTemplates(pageable)
-        return ResponseEntity.ok(templates.map(templateControllerConvert::toResponse))
+        return ResponseEntity.ok(templates.map(templateControllerConvert::toResponseAll))
     }
 
     override fun createTemplate(templateRequest: TemplateRequest): ResponseEntity<TemplateResponse> {
@@ -32,15 +33,6 @@ class TemplateControllerImpl(
                 .toUri()
 
         return ResponseEntity.created(uri).body(templateControllerConvert.toResponse(template))
-    }
-
-    override fun insertTemplatePack(file: MultipartFile, templateID: String): ResponseEntity<Any> {
-       templateUseCase.savePack(file, templateID)
-        val uri =
-            ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}").buildAndExpand(templateID)
-                .toUri()
-        return ResponseEntity.created(uri).build()
     }
 
     override fun insertExampleImage(file: List<MultipartFile>, templateID: String): ResponseEntity<Any> {
@@ -55,5 +47,14 @@ class TemplateControllerImpl(
     override fun getTemplateById(templateID: String): ResponseEntity<TemplateResponse> {
         val template = templateUseCase.findById(templateID)
         return ResponseEntity.ok(templateControllerConvert.toResponse(template))
+    }
+
+    override fun insertUri(uri: String, templateID: String): ResponseEntity<Any> {
+        templateUseCase.insertUri(uri, templateID)
+        val uri =
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(templateID)
+                .toUri()
+        return ResponseEntity.created(uri).build()
     }
 }

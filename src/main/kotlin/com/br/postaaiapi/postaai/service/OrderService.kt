@@ -13,7 +13,7 @@ interface OrderService {
     fun saveOrder(order: OrderEntity): OrderEntity
 
     fun findByOrderId(id: String): OrderEntity
+    @Transactional
     fun saveLogo(idOrder: String, logoUri: URI)
-
-    fun findAllOrders(pageable: Pageable): Page<OrderEntity>
+    fun findIdUser(idUser: String, pageable: Pageable): Page<OrderEntity>?
 }
