@@ -7,6 +7,7 @@ import com.br.postaaiapi.postaai.service.OrderService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.net.URI
 
 private const val ORDER_NAO_ENCONTRADA = "Order não encontrada"
@@ -15,6 +16,7 @@ private const val ORDER_NAO_ENCONTRADA = "Order não encontrada"
 class OrderServiceImpl(
     private val orderRepository: OrderRepository,
 ) : OrderService {
+    @Transactional
     override fun saveOrder(order: OrderEntity): OrderEntity {
         return orderRepository.save(order)
     }
@@ -32,8 +34,8 @@ class OrderServiceImpl(
         orderRepository.save(order)
     }
 
-    override fun findAllOrders(pageable: Pageable): Page<OrderEntity> {
-        return orderRepository.findAll(pageable)
+    override fun findIdUser(idUser: String, pageable: Pageable): Page<OrderEntity>? {
+        return orderRepository.findByIdUser(idUser, pageable)
     }
 
 }

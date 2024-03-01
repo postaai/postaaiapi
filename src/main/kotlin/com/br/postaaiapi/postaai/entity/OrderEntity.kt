@@ -11,12 +11,12 @@ data class OrderEntity(
     @Id
     val id: String? = null,
     val idUser: String,
-    val template: TemplateEntity,
+    val idTemplate: String,
     var logoUri: String? = null,
     val createdAt: LocalDateTime? = null,
     var updatedAt: LocalDateTime? = null,
     var paymentStatus: String? = null,
-    val resultPack: List<ResultPack>? = null,
+    var resultPack: List<PathImages>? = null,
     val fields: Map<String, String>? = null,
-    val processStatus: String? = null
+    var processStatus: String? = null
 ) : Serializable

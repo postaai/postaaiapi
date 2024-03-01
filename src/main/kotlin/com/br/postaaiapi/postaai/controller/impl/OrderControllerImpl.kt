@@ -51,8 +51,8 @@ class OrderControllerImpl(
         return ResponseEntity.ok(orderControllerConvert.toResponse(order))
     }
 
-    override fun getAllOrders(pageable: Pageable): ResponseEntity<Page<OrderResponse>> {
-        val orders = orderUseCase.findAllOrders(pageable)
+    override fun getAllOrdersByIDUser(idUser: String, pageable: Pageable): ResponseEntity<Page<OrderResponse>> {
+        val orders = orderUseCase.findByIdUser(idUser, pageable)
         return ResponseEntity.ok(orders?.map(orderControllerConvert::toResponse))
     }
 

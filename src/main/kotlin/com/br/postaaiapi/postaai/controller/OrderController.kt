@@ -33,7 +33,7 @@ interface OrderController {
     @GetMapping("/get/{orderID}")
     fun getOrder(@PathVariable("orderID") orderID: String): ResponseEntity<OrderResponse>
 
-    @Operation(summary = "Get All Orders", description = "Get All Orders")
-    @GetMapping("/getAll")
-    fun getAllOrders(pageable: Pageable): ResponseEntity<Page<OrderResponse>>
+    @Operation(summary = "Get All Orders by ID User", description = "Get All Orders by ID User")
+    @GetMapping("/getAll/{idUser}")
+    fun getAllOrdersByIDUser(@PathVariable("idUser") idUser: String,pageable: Pageable): ResponseEntity<Page<OrderResponse>>
 }

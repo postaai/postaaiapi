@@ -37,7 +37,7 @@ class OrderUseCaseImpl(
 
         val orderEntity = OrderEntity(
             idUser = order.idUser,
-            template = getTemplateById(order.idTemplate),
+            idTemplate = getTemplateById(order.idTemplate).let { it.id ?: "" },
             paymentStatus = EnumPaymentStatus.PENDING.getDescription(),
             processStatus = EnumProcessStatus.PROCESSING.getDescription(),
             createdAt = LocalDateTime.now(),
@@ -66,16 +66,12 @@ class OrderUseCaseImpl(
 
     }
 
-    override fun findAllOrders(pageable: Pageable): Page<OrderBusinessOutput>? {
-        return orderService.findAllOrders(pageable).map(orderServiceConverter::toBusinessOutput)
-    }
-
     override fun findById(id: String): OrderBusinessOutput {
         return orderService.findByOrderId(id).let(orderServiceConverter::toBusinessOutput)
     }
 
-    override fun saveResultOrder(order: OrderMessageProcessedInput) {
-        TODO("Not yet implemented")
+    override fun findByIdUser(idUser: String, pageable: Pageable): Page<OrderBusinessOutput>? {
+        return orderService.findIdUser(idUser, pageable)?.map(orderServiceConverter::toBusinessOutput)
     }
 
     private fun sendOrderQueue(orderPersisted: OrderBusinessOutput) {
@@ -83,9 +79,11 @@ class OrderUseCaseImpl(
             throw Exception("Order not approved")
         }
 
+        val template = getTemplateById(orderPersisted.idTemplate)
+
         val message = OrderMessageInput(
             id = orderPersisted.id ?: "",
-            templateURI = orderPersisted.template?.uri ?: "",
+            templateURI = template.uri ?: "",
             fields = orderPersisted.fields,
             logoURI = orderPersisted.logoUri ?: ""
         )
