@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.awt.Image
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
+import java.net.URI
 import java.time.LocalDateTime
 import javax.imageio.ImageIO
 

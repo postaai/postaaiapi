@@ -8,12 +8,10 @@ import com.br.postaaiapi.postaai.gateway.RabbitMQGateway
 import com.br.postaaiapi.postaai.gateway.S3Gateway
 import com.br.postaaiapi.postaai.service.OrderService
 import com.br.postaaiapi.postaai.service.TemplateService
-import com.br.postaaiapi.postaai.service.bussinessModel.OrderBusinessInput
-import com.br.postaaiapi.postaai.service.bussinessModel.OrderBusinessOutput
-import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageInput
-import com.br.postaaiapi.postaai.service.bussinessModel.OrderMessageProcessedInput
+import com.br.postaaiapi.postaai.service.bussinessModel.*
 import com.br.postaaiapi.postaai.service.converter.OrderServiceConverter
 import com.br.postaaiapi.postaai.useCase.OrderUseCase
+import com.br.postaaiapi.postaai.utils.toS3URI
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -21,6 +19,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.multipart.MultipartFile
 import java.time.LocalDateTime
 import java.util.*
+
+private const val LOGO = "logo.png"
 
 @Service
 class OrderUseCaseImpl(
@@ -33,6 +33,14 @@ class OrderUseCaseImpl(
 
     @Value("\${s3.bucket-order}")
     private val bucketOrder: String? = null
+
+    @Value("\${logoDimensions.width}")
+    private val logoWidth: Int = 0
+
+    @Value("\${logoDimensions.height}")
+    private val logoHeight: Int = 0
+
+
     override fun saveOrder(order: OrderBusinessInput): OrderBusinessOutput {
 
         val orderEntity = OrderEntity(
@@ -49,9 +57,8 @@ class OrderUseCaseImpl(
     }
 
     override fun saveLogo(logo: MultipartFile, orderId: String) {
-        val idLogo = UUID.randomUUID().toString()
-        val logoUri = s3Gateway.uploadImage(bucketOrder, logo, idLogo, idLogo)
         val order = orderService.findByOrderId(orderId)
+        val logoUri = s3Gateway.uploadImage(bucketOrder, logo, LOGO, orderId)
         order.logoUri = logoUri.toString()
         order.updatedAt = LocalDateTime.now()
         orderService.saveOrder(order)
@@ -83,9 +90,15 @@ class OrderUseCaseImpl(
 
         val message = OrderMessageInput(
             id = orderPersisted.id ?: "",
-            templateURI = template.uri ?: "",
-            fields = orderPersisted.fields,
-            logoURI = orderPersisted.logoUri ?: ""
+            templateUri = template.uri?.toS3URI() ?: "",
+            logoUri = orderPersisted.logoUri?.toS3URI() ?: "",
+            templateMetadata = TemplateMetadata(
+                textFields = orderPersisted.fields,
+                logoDimensions = LogoDimensions(
+                    width = logoWidth,
+                    height = logoHeight
+            ),
+            )
         )
         rabbitMQGateway.sendMessageOrder(message)
     }

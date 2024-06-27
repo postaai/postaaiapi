@@ -31,7 +31,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-amqp:3.2.1")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+   // implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

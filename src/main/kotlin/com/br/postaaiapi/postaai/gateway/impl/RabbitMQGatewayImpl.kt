@@ -26,8 +26,13 @@ class RabbitMQGatewayImpl(
 
     @RabbitListener(queues = ["\${spring.rabbitmq.queues.order-processed-queue}"])
     override fun listenMessageOrder(@Payload message: OrderMessageProcessedInput) {
-        println("Mensagem recebida: ${message}")
-        orderSaveResultUseCase.saveResultOrder(message)
+        try {
+            println("Mensagem recebida: ${message}")
+            orderSaveResultUseCase.saveResultOrder(message)
+        }catch (e: Exception){
+            println("Erro ao processar mensagem: ${e.message}")
+        }
+
 
     }
 }
