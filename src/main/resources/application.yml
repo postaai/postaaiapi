@@ -31,6 +31,10 @@ thumbnail:
   width: ${SCALINGWIDTH:200}
   height: ${SCALINGHEIGHT:200}
 
+logoDimensions:
+  width: ${LOGOWIDTH:200}
+  height: ${LOGOHEIGHT:200}
+
 # Server configuration
 server:
   port: 8080
