@@ -1,24 +1,18 @@
 package com.br.postaaiapi.postaai.config
 
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.filter.CorsFilter
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-class CorsConfiguration {
+class CorsConfiguration : WebMvcConfigurer {
 
-    @Bean
-    fun corsFilter(): CorsFilter {
-        val source = UrlBasedCorsConfigurationSource()
-        val config = CorsConfiguration().apply {
-            allowCredentials = true
-            addAllowedOrigin("*")
-            addAllowedHeader("*")
-            addAllowedMethod("*")
-        }
-        source.registerCorsConfiguration("/**", config)
-        return CorsFilter(source)
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**")
+            .allowedOriginPatterns("*") // Aqui você pode especificar os domínios permitidos
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos HTTP permitidos
+            .allowedHeaders("*") // Headers permitidos
+            .allowCredentials(true) // Permite credenciais (por exemplo, cookies)
+            .maxAge(3600) // Tempo de cache para pré-flush do preflight request
     }
 }
