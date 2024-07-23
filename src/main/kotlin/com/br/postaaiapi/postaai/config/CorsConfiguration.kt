@@ -10,7 +10,7 @@ class CorsConfiguration : WebMvcConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         registry.addMapping("/**")
             .allowedOriginPatterns("*") // Aqui você pode especificar os domínios permitidos
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos HTTP permitidos
+            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH") // Métodos HTTP permitidos
             .allowedHeaders("*") // Headers permitidos
             .allowCredentials(true) // Permite credenciais (por exemplo, cookies)
             .maxAge(3600) // Tempo de cache para pré-flush do preflight request
